@@ -4,7 +4,7 @@
 
 新 qq农场游戏交流群：1077372084
 
-[Discord](https://discord.gg/jSp8vrzv)
+[Discord](https://discord.gg/suya45TU)
 
 ## 技术栈
 

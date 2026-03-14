@@ -45,8 +45,19 @@ jobs:
       - name: Build
         run: pnpm package:release
 
+      - name: Build Docker
+        run: |
+          docker buildx build \
+            --platform linux/arm64/v8 \
+            -t farm-docker-arm64 \
+            -o type=docker,dest=./core/dist/qq-farm-bot-docker-arm64.tar \
+            -f ./core/Dockerfile \  # 指定Dockerfile的实际路径
+            .  # 构建上下文改为仓库根目录（能找到core、web、pnpm-workspace.yaml等）
+
+
       - name: List Artifacts
         run: ls -R core/dist
+
 
       - name: Upload Windows
         uses: actions/upload-artifact@v4
@@ -71,15 +82,13 @@ jobs:
         with:
           name: farm-mac-arm64
           path: ./core/dist/qq-farm-bot-macos-arm64
-
-
+          
       - name: Upload Docker
-        run: |
-          docker buildx build \
-            --platform linux/arm64/v8 \
-            -t farm-docker-arm64 \
-            -o type=docker,dest=qq-farm-bot-docker-arm64.tar \
-            ./core
+        uses: actions/upload-artifact@v4
+        with:
+          name: farm-docker-arm64
+          path: ./core/dist/qq-farm-bot-docker-arm64.tar
+
 
 
   Release:

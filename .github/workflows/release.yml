@@ -75,8 +75,6 @@ jobs:
 
       - name: Upload Docker
         run:
-          IMAGE_NAME="farm-docker-x64"
-          
           docker buildx build \
             --platform linux/arm64/v8 \
             -t farm-docker-x64 \

@@ -1,5 +1,5 @@
 # .github/workflows/docker-release.yml
-name: 构建ARM64 Docker镜像并上传Release
+name: arm64
 
 # 触发条件：创建GitHub Release时（包括预发布）
 on:

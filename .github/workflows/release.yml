@@ -46,14 +46,7 @@ jobs:
         run: pnpm package:release
 
       - name: Build Docker
-        run: |
-          docker buildx build \
-            --platform linux/arm64/v8 \
-            -t farm-docker-arm64 \
-            -o type=docker,dest=./core/dist/qq-farm-bot-docker-arm64.tar \
-            -f ./core/Dockerfile \  # 指定Dockerfile的实际路径
-            .  # 构建上下文改为仓库根目录（能找到core、web、pnpm-workspace.yaml等）
-
+        run: docker buildx build --platform linux/arm64/v8 -t farm-docker-arm64 -o type=docker,dest=./core/dist/qq-farm-bot-docker-arm64.tar -f ./core/Dockerfile .
 
       - name: List Artifacts
         run: ls -R core/dist

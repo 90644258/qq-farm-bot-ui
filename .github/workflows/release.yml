@@ -78,6 +78,11 @@ jobs:
           name: farm-docker-x64
           path: ./core/dist/qq-farm-bot-docker-x64
           platforms: linux/arm64/v8
+          
+      - name: Upload Docker
+        run:
+          IMAGE_NAME="farm-docker-x64"
+          
 
 
   Release:

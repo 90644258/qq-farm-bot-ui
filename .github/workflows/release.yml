@@ -74,11 +74,11 @@ jobs:
 
 
       - name: Upload Docker
-        run:
+        run: |
           docker buildx build \
             --platform linux/arm64/v8 \
-            -t farm-docker-x64 \
-            -o type=docker,dest=./core/dist/qq-farm-bot-docker-x64.tar \
+            -t farm-docker-arm64 \
+            -o type=docker,dest=./core/dist/qq-farm-bot-docker-arm64.tar \
 
 
   Release:
@@ -108,4 +108,4 @@ jobs:
             farm-linux-x64/qq-farm-bot-linux-x64,
             farm-mac-x64/qq-farm-bot-macos-x64,
             farm-mac-arm64/qq-farm-bot-macos-arm64,
-            farm-docker-arm64/qq-farm-bot-docker-arm64
+            farm-docker-arm64/qq-farm-bot-docker-arm64.tar

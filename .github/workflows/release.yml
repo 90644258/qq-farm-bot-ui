@@ -65,6 +65,12 @@ jobs:
           name: farm-mac-arm64
           path: ./core/dist/qq-farm-bot-macos-arm64
 
+      - name: Upload Docker
+        uses: actions/upload-artifact@v4
+        with:
+          name: farm-win-x64
+          path: ./core/dist/qq-farm-bot-win-x64.exe
+
   Release:
     runs-on: ubuntu-latest
     needs: build

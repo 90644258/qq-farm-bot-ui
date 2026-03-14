@@ -32,6 +32,13 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
 
+      - name: Set up QEMU for ARM64 building
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
@@ -68,8 +75,10 @@ jobs:
       - name: Upload Docker
         uses: actions/upload-artifact@v4
         with:
-          name: farm-win-x64
-          path: ./core/dist/qq-farm-bot-win-x64.exe
+          name: farm-docker-x64
+          path: ./core/dist/qq-farm-bot-docker-x64
+
+
 
   Release:
     runs-on: ubuntu-latest
@@ -97,4 +106,5 @@ jobs:
             farm-win-x64/qq-farm-bot-win-x64.exe,
             farm-linux-x64/qq-farm-bot-linux-x64,
             farm-mac-x64/qq-farm-bot-macos-x64,
-            farm-mac-arm64/qq-farm-bot-macos-arm64
+            farm-mac-arm64/qq-farm-bot-macos-arm64,
+            farm-docker-arm64/qq-farm-bot-docker-arm64

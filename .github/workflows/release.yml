@@ -78,8 +78,8 @@ jobs:
           docker buildx build \
             --platform linux/arm64/v8 \
             -t farm-docker-arm64 \
-            -o type=docker,dest=./core/dist/qq-farm-bot-docker-arm64.tar \
-            .
+            -o type=docker,dest=qq-farm-bot-docker-arm64.tar \
+            ./core
 
 
   Release:

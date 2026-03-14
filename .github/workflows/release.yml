@@ -38,19 +38,21 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build
         run: pnpm package:release
 
+      # 新增：确保core/dist目录存在（避免Docker镜像导出失败）
+      - name: Ensure dist directory exists
+        run: mkdir -p ./core/dist
+
       - name: Build Docker
         run: docker buildx build --platform linux/arm64/v8 -t farm-docker-arm64 -o type=docker,dest=./core/dist/qq-farm-bot-docker-arm64.tar -f ./core/Dockerfile .
 
       - name: List Artifacts
         run: ls -R core/dist
-
 
       - name: Upload Windows
         uses: actions/upload-artifact@v4
@@ -82,8 +84,6 @@ jobs:
           name: farm-docker-arm64
           path: ./core/dist/qq-farm-bot-docker-arm64.tar
 
-
-
   Release:
     runs-on: ubuntu-latest
     needs: build
@@ -91,11 +91,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - uses: actions/download-artifact@v4
+      # 修复1：指定下载路径为artifacts，确保目录存在
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts  # 所有文件下载到artifacts目录
 
+      # 修复2：兼容目录不存在的情况，避免步骤报错
       - name: Display structure of downloaded files
-        run: ls -R artifacts
+        run: |
+          if [ -d "artifacts" ]; then
+            echo "=== Artifacts 目录结构 ==="
+            ls -R artifacts
+          else
+            echo "⚠️ Artifacts 目录不存在，打印当前目录文件："
+            ls -la
+          fi
+        continue-on-error: true
 
+      # 修复3：Release路径添加artifacts/前缀，匹配下载路径
       - name: Release
         uses: ncipollo/release-action@v1
         with:
@@ -107,8 +121,8 @@ jobs:
           prerelease: ${{ github.event.inputs.prerelease }}
           allowUpdates: true
           artifacts: >
-            farm-win-x64/qq-farm-bot-win-x64.exe,
-            farm-linux-x64/qq-farm-bot-linux-x64,
-            farm-mac-x64/qq-farm-bot-macos-x64,
-            farm-mac-arm64/qq-farm-bot-macos-arm64,
-            farm-docker-arm64/qq-farm-bot-docker-arm64.tar
+            artifacts/farm-win-x64/qq-farm-bot-win-x64.exe,
+            artifacts/farm-linux-x64/qq-farm-bot-linux-x64,
+            artifacts/farm-mac-x64/qq-farm-bot-macos-x64,
+            artifacts/farm-mac-arm64/qq-farm-bot-macos-arm64,
+            artifacts/farm-docker-arm64/qq-farm-bot-docker-arm64.tar

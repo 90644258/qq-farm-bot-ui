@@ -73,11 +73,11 @@ jobs:
           path: ./core/dist/qq-farm-bot-macos-arm64
 
       - name: Upload Docker
-        uses: actions/upload-artifact@v4
+        uses: docker/build-push-action@v4
         with:
           name: farm-docker-x64
           path: ./core/dist/qq-farm-bot-docker-x64
-
+          platforms: linux/arm64/v8
 
 
   Release:
